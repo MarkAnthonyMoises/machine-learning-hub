@@ -1,0 +1,191 @@
+/* Import modern font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+
+  /* Animated gradient background */
+  background: linear-gradient(-45deg, #667eea, #764ba2, #6b73ff, #000dff);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Background animation */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.container {
+  width: 95%;
+  max-width: 550px; /* increased from ~420px */
+  padding: 60px 50px; /* more spacing */
+
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px);
+  border-radius: 25px;
+
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+
+  text-align: center;
+  color: #fff;
+
+  animation: fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1 {
+  font-size: 2.5rem; /* bigger title */
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+p {
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+
+  font-size: 15px;
+}
+
+input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+
+input:focus {
+  background: rgba(255,255,255,0.3);
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+/* Buttons */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(90deg, #ff7eb3, #ff758c);
+  color: white;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Links */
+a {
+  color: #ffd1dc;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Highlight email badge */
+.highlight-email {
+  margin: 25px 0;
+  padding: 18px 20px;
+
+  border-radius: 15px;
+
+  font-size: 1.1rem; /* bigger text */
+  font-weight: 600;
+
+  background: rgba(255,255,255,0.25);
+
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.highlight-email:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .container {
+    padding: 30px 20px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}
+
+/* Checkbox container aligned right */
+.checkbox-container {
+  display: flex;
+  justify-content: space-between; /* pushes text left, checkbox right */
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 5px;
+}
+
+/* Label styling */
+.checkbox-container label {
+  font-size: 0.9rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Custom checkbox style */
+.checkbox-container input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+
+  accent-color: #ff758c; /* matches your button gradient */
+  transform: scale(1.2);
+}
