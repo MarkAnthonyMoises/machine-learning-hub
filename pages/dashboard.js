@@ -137,20 +137,25 @@ export default function Dashboard() {
     }
   };
 
-  const importArticle = async () => {
-    if (!importUrl) return;
+const importArticle = async () => {
+  if (!importUrl) return;
 
-    try {
-      const res = await fetch(`/api/import?url=${encodeURIComponent(importUrl)}`);
-      const data = await res.json();
+  try {
+    const cleanUrl = importUrl.trim();
 
-      setTitle(data.title);
-      setNewArticle(data.content);
+    const res = await fetch(
+      `/api/import?url=${encodeURIComponent(cleanUrl)}`
+    );
 
-    } catch (err) {
-      alert("Failed to import article");
-    }
-  };
+    const data = await res.json();
+
+    setTitle(data.title);
+    setNewArticle(data.content);
+
+  } catch (err) {
+    alert("Failed to import article");
+  }
+};
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
