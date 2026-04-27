@@ -113,10 +113,28 @@ export default function Dashboard() {
     fetchArticles();
   };
 
-  const shareArticle = (id) => {
+  // ✅ UPDATED SHARE FUNCTION
+  const shareArticle = async (id) => {
     const url = `${window.location.origin}/article/${id}`;
-    navigator.clipboard.writeText(url);
-    alert("Shareable link copied!");
+
+    try {
+      // copy link first
+      await navigator.clipboard.writeText(url);
+
+      // show suggested platforms
+      if (navigator.share) {
+        await navigator.share({
+          title: "Check out this article",
+          text: "Read this article:",
+          url: url,
+        });
+      } else {
+        alert("Link copied!");
+      }
+
+    } catch (err) {
+      console.log("Share cancelled");
+    }
   };
 
   const importArticle = async () => {
@@ -176,7 +194,6 @@ export default function Dashboard() {
       }}>
         <h2>Publish Article</h2>
 
-        {/* import row */}
         <div style={{
           display: "flex",
           gap: 10,
