@@ -114,28 +114,24 @@ export default function Dashboard() {
   };
 
   // ✅ UPDATED SHARE FUNCTION
-  const shareArticle = async (id) => {
-    const url = `${window.location.origin}/article/${id}`;
+const shareArticle = async (id) => {
+  const url = `${window.location.origin}/article/${id}`;
 
-    try {
-      // copy link first
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: "Check out this article",
+        text: "Read this article:",
+        url: url,
+      });
+    } else {
       await navigator.clipboard.writeText(url);
-
-      // show suggested platforms
-      if (navigator.share) {
-        await navigator.share({
-          title: "Check out this article",
-          text: "Read this article:",
-          url: url,
-        });
-      } else {
-        alert("Link copied!");
-      }
-
-    } catch (err) {
-      console.log("Share cancelled");
+      alert("Link copied!");
     }
-  };
+  } catch (err) {
+    console.log("Share cancelled");
+  }
+};
 
 const importArticle = async () => {
   if (!importUrl) return;
