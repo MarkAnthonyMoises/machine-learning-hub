@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router"; // <-- import useRouter
+import { useRouter } from "next/router";
 import { supabase } from "../lib/supabaseClient";
 
 export default function SignUp() {
@@ -9,9 +9,10 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const router = useRouter(); // <-- initialize router
+  const router = useRouter();
 
   const handleSignUp = async () => {
+
     if (!email || !password || !confirmPassword) {
       alert("Please fill in all fields.");
       return;
@@ -27,14 +28,46 @@ export default function SignUp() {
       return;
     }
 
-    const { data, error } = await supabase.auth.signUp({ email, password });
+
+    // create auth user
+    const { data, error } =
+      await supabase.auth.signUp({
+        email,
+        password
+      });
+
 
     if (error) {
       alert(`Sign-Up Error: ${error.message}`);
-    } else {
-      alert("Sign-Up Successful! Redirecting to login...");
-      router.push("/login"); // <-- redirect to login page
+      return;
     }
+
+
+    // save into profiles table
+    if (data?.user) {
+
+      const username =
+        email.split("@")[0];
+
+
+      await supabase
+        .from("profiles")
+        .insert([
+          {
+            id: data.user.id,
+            email: data.user.email,
+            username: username
+          }
+        ]);
+
+    }
+
+
+    alert(
+      "Sign-Up Successful! Redirecting to login..."
+    );
+
+    router.push("/login");
   };
 
   return (
@@ -45,37 +78,66 @@ export default function SignUp() {
         type="email"
         placeholder="Email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) =>
+          setEmail(e.target.value)
+        }
       />
 
       <input
-        type={showPassword ? "text" : "password"}
+        type={
+          showPassword
+            ? "text"
+            : "password"
+        }
         placeholder="Password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={(e) =>
+          setPassword(e.target.value)
+        }
       />
 
       <input
-        type={showPassword ? "text" : "password"}
+        type={
+          showPassword
+            ? "text"
+            : "password"
+        }
         placeholder="Confirm Password"
         value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={(e) =>
+          setConfirmPassword(
+            e.target.value
+          )
+        }
       />
 
-      {/* Show Password Checkbox */}
       <div className="checkbox-container">
-        <label>Show Password</label>
+        <label>
+          Show Password
+        </label>
+
         <input
           type="checkbox"
           checked={showPassword}
-          onChange={() => setShowPassword(!showPassword)}
+          onChange={() =>
+            setShowPassword(
+              !showPassword
+            )
+          }
         />
       </div>
 
-      <button onClick={handleSignUp}>Sign Up</button>
+      <button
+        onClick={handleSignUp}
+      >
+        Sign Up
+      </button>
 
       <p>
-        Already have an account? <Link href="/login">Login here</Link>
+        Already have an account?{" "}
+        <Link href="/login">
+          Login here
+        </Link>
       </p>
     </div>
   );

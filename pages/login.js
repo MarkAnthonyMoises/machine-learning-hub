@@ -23,10 +23,23 @@ export default function Login() {
 
     if (error) {
       alert(`Login Error: ${error.message}`);
-    } else {
-      alert("Login Successful!");
-      router.push("/dashboard");
+      return;
     }
+
+    const user = data.user;
+
+    if (!user.email_confirmed_at) {
+      await supabase.auth.signOut();
+
+      alert(
+        "Please verify your email first before logging in. Check your inbox."
+      );
+
+      return;
+    }
+
+    alert("Login Successful!");
+    router.push("/dashboard");
   };
 
   return (
@@ -47,7 +60,6 @@ export default function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      {/* Checkbox */}
       <div
         className="checkbox-container"
         onClick={() => setShowPassword(!showPassword)}

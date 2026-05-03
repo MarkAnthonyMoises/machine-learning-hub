@@ -20,21 +20,19 @@ export default async function handler(req, res) {
       }
     });
 
-    const mailOptions = {
+    await transporter.sendMail({
       from: `"Machine Learning Hub" <${process.env.EMAIL_USER}>`,
-      to: emails, // array of emails
+      bcc: emails,
       subject: "📢 New Article Published",
       html: `
         <div style="font-family: Arial; padding:20px;">
           <h2>New Article Posted</h2>
-          
+
           <p><b>@${author}</b> published a new article:</p>
-          
+
           <h3>${title}</h3>
 
-          <p>
-            Visit the website to read the full article.
-          </p>
+          <p>Visit the website to read the full article.</p>
 
           <hr/>
 
@@ -43,9 +41,7 @@ export default async function handler(req, res) {
           </small>
         </div>
       `
-    };
-
-    await transporter.sendMail(mailOptions);
+    });
 
     return res.status(200).json({ success: true });
 
