@@ -385,7 +385,18 @@ const deleteArticle = async (article) => {
                 marginBottom: 10
               }}
             >
-              By @{article.username || "anonymous"}
+              By @{article.username || "anonymous"} •{" "}
+              {new Date(article.created_at).toLocaleString(
+                "en-US",
+                {
+                  timeZone: "Asia/Manila",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit"
+                }
+              )}
             </div>
 
             <p style={{ marginBottom: 10 }}>

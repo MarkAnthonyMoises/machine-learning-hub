@@ -11,64 +11,55 @@ export default function SignUp() {
 
   const router = useRouter();
 
-  const handleSignUp = async () => {
+ const handleSignUp = async () => {
+  if (!email || !password || !confirmPassword) {
+    alert("Please fill in all fields.");
+    return;
+  }
 
-    if (!email || !password || !confirmPassword) {
-      alert("Please fill in all fields.");
-      return;
-    }
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
 
-    if (password.length < 6) {
-      alert("Password must be at least 6 characters.");
-      return;
-    }
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
 
+  // ✅ CASE 1: real error from Supabase
+  if (error) {
+    alert(`Sign-Up Error: ${error.message}`);
+    return;
+  }
 
-    // create auth user
-    const { data, error } =
-      await supabase.auth.signUp({
-        email,
-        password
-      });
+  // ✅ CASE 2: email already exists (IMPORTANT FIX)
+  if (data?.user && data.user.identities?.length === 0) {
+    alert("This email is already registered. Please login instead.");
+    return;
+  }
 
+  // save into profiles table (only for new users)
+  if (data?.user) {
+    const username = email.split("@")[0];
 
-    if (error) {
-      alert(`Sign-Up Error: ${error.message}`);
-      return;
-    }
+    await supabase.from("profiles").insert([
+      {
+        id: data.user.id,
+        email: data.user.email,
+        username: username,
+      },
+    ]);
+  }
 
-
-    // save into profiles table
-    if (data?.user) {
-
-      const username =
-        email.split("@")[0];
-
-
-      await supabase
-        .from("profiles")
-        .insert([
-          {
-            id: data.user.id,
-            email: data.user.email,
-            username: username
-          }
-        ]);
-
-    }
-
-
-    alert(
-      "Sign-Up Successful! Redirecting to login..."
-    );
-
-    router.push("/login");
-  };
+  alert("Sign-Up Successful! Redirecting to login...");
+  router.push("/login");
+};
 
   return (
     <div className="container">
